@@ -1,0 +1,68 @@
+name: Pipeline-Backend
+
+on: [push, pull_request]
+
+jobs:
+  Tests:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Cache pip
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r cgap/requirements.txt
+        working-directory: .
+
+  # lint:
+  #   runs-on: ubuntu-18.04
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Set up Python 3.7
+  #       uses: actions/setup-python@v1
+  #       with:
+  #         python-version: 3.7
+  #     - name: Cache pip
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ~/.cache/pip
+  #         key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+  #     - name: Install dependencies
+  #       run: |
+  #         python -m pip install --upgrade pip
+  #         pip install -r cgap/requirements.txt
+  #       working-directory: .
+  #     - name: Analysing the code with pylint
+  #       run: |
+  #         pylint --disable=all --enable=E,F,R0401,wrong-import-position,reimported,wrong-import-order,unused-import,unused-argument --disable=E1101,E1102,E1130,E1136,E1121,E1305 cgap
+  #       working-directory: .
+
+  black:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Cache pip
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install black==20.8b1
+      - name: Black check
+        run: |
+          black --safe --check backend
+        working-directory:
