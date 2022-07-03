@@ -1,5 +1,8 @@
-{% extends "layout.html" %} {% block content %} {% for post in posts.items %}
+{% extends "layout.html" %} 
 
+{% block content %}
+
+{% for post in posts.items %}
 <article class="media content-section">
   <img
     class="rounded-circle article-img"
@@ -24,15 +27,31 @@
     <p class="article-content">{{ post.content }}</p>
   </div>
 </article>
+{% endfor %} 
 
-{% endfor %} {% for page_num in posts.iter_pages(left_edge=1, right_edge=1,
-left_current=1, right_current=2) %} {% if page_num %} {% if posts.page ==
-page_num %}
-<a class="btn btn-info mb-4" href="{{ url_for('home', page=page_num) }}"
-  >{{ page_num }}</a
->
-{% else %}
-<a class="btn btn-outline-info mb-4" href="{{ url_for('home', page=page_num) }}"
-  >{{ page_num }}</a
->
-{% endif %} {% else %} ... {% endif %} {% endfor %} {% endblock content %}
+{% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %} 
+  {% if page_num %} 
+    {% if posts.page == page_num %}
+      <a class="btn btn-info mb-4" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
+    {% else %}
+      <a class="btn btn-outline-info mb-4" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
+    {% endif %} 
+  {% else %} 
+    ... 
+  {% endif %} 
+{% endfor %} 
+
+{% endblock content %}
+
+<div class="content-section">
+  <h3>Our Sidebar</h3>
+  <p class='text-muted'>Random Sidebar Information.
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-light">Latest Posts</li>
+      <li class="list-group-item list-group-item-light">Announcements</li>
+      <li class="list-group-item list-group-item-light">Calendars</li>
+      <li class="list-group-item list-group-item-light">etc</li>
+    </ul>
+  </p>
+</div>
+
