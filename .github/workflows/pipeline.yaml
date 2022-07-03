@@ -42,7 +42,7 @@ jobs:
         working-directory: .
       - name: Analysing the code with pylint
         run: |
-          pylint --disable=all --enable=E,F,R0401,wrong-import-position,reimported,wrong-import-order,unused-import,unused-argument --disable=E1101,E1102,E1130,E1136,E1121,E1305 backend
+          pylint --disable=all --enable=E,F,R0401,wrong-import-position,reimported,wrong-import-order,unused-import,unused-argument --disable=E1101,E1102,E1130,E1136,E1121,E1305 cgap
         working-directory: .
 
   black:
