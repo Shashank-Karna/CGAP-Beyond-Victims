@@ -21,10 +21,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r cgap/requirements.txt
         working-directory: .
-      - name: Running Test Cases
-        run: |
-          python -m pytest -vv backend/tests/
-        working-directory: .
 
   lint:
     runs-on: ubuntu-18.04
