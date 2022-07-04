@@ -13,14 +13,14 @@ from flask_login import login_user, current_user, logout_user, login_required
 @app.route("/")
 @app.route("/home")
 def home():
-    page = request.args.get("page", 1, type=int)
-    posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
-    return render_template("home.html", posts=posts)
+    return render_template("home.html")
 
 
 @app.route("/blogs")
 def blogs():
-    return render_template("blogs.html", title="Blogs")
+    page = request.args.get("page", 1, type=int)
+    posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
+    return render_template("blogs.html", title="Blogs", posts=posts)
 
 
 @app.route("/about")
@@ -115,7 +115,7 @@ def new_post():
         db.session.add(post)
         db.session.commit()
         flash("Your post has been created!", "success")
-        return redirect(url_for("home"))
+        return redirect(url_for("blogs"))
     return render_template(
         "create_post.html", title="New Post", form=form, legend="New Post"
     )
@@ -157,7 +157,7 @@ def delete_post(post_id):
     db.session.delete(post)
     db.session.commit()
     flash("Your Post has been deleted!", "success")
-    return redirect(url_for("home"))
+    return redirect(url_for("blogs"))
 
 
 @app.route("/user/<string:username>")
