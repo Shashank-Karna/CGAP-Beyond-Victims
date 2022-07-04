@@ -81,6 +81,7 @@ body {
 
 .carousel-inner {
   width: 150%;
+  margin-bottom: 20px;
 }
 
 .carousel-indicators {
