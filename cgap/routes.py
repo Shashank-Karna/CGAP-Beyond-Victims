@@ -4,9 +4,15 @@ import os
 from PIL import Image
 from click import password_option
 from flask import render_template, url_for, flash, redirect, request, abort
-from cgap.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
+from cgap.forms import (
+    RegistrationForm,
+    LoginForm,
+    UpdateAccountForm,
+    PostForm,
+    SubmitPostForm,
+)
 from cgap import app, db, bcrypt
-from cgap.models import User, Post
+from cgap.models import Submission, User, Post
 from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -171,3 +177,19 @@ def user_posts(username):
         .paginate(page=page, per_page=5)
     )
     return render_template("user_posts.html", posts=posts, user=user)
+
+
+@app.route("/submit_post", methods=["GET", "POST"])
+def submit_post():
+    form = SubmitPostForm()
+    if form.validate_on_submit():
+        submission = Submission(
+            title=form.title.data, content=form.content.data, author=form.author.data
+        )
+        db.session.add(submission)
+        db.session.commit()
+        flash("Your post has been submitted!", "success")
+        return redirect(url_for("blogs"))
+    return render_template(
+        "submit_post.html", title="Submit Post", form=form, legend="Submit Post"
+    )
