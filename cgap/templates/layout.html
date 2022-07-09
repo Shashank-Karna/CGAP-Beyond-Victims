@@ -52,7 +52,7 @@
                 >Blogs</a
               >
               <a class="nav-item nav-link" href="{{ url_for('submit_post') }}"
-                >Submissions</a
+                >Submit Post</a
               >
               <a class="nav-item nav-link" href="{{ url_for('about') }}"
                 >About</a
@@ -63,6 +63,9 @@
               {% if current_user.is_authenticated %}
               <a class="nav-item nav-link" href="{{ url_for('new_post') }}"
                 >New Post</a
+              >
+              <a class="nav-item nav-link" href="{{ url_for('submissions') }}"
+                >Submissions</a
               >
               <a class="nav-item nav-link" href="{{ url_for('account') }}"
                 >Account</a
