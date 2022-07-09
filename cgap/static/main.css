@@ -110,14 +110,14 @@ a:focus {
   text-decoration: none;
 }
 
-.form-control {
+/* .form-control {
   background: #212529;
   border-color: #545454;
 }
 
 .form-control:focus {
   background: #212529;
-}
+} */
 
 footer {
   background: #212529;
