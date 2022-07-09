@@ -193,3 +193,12 @@ def submit_post():
     return render_template(
         "submit_post.html", title="Submit Post", form=form, legend="Submit Post"
     )
+
+
+@app.route("/submissions")
+def submissions():
+    page = request.args.get("page", 1, type=int)
+    posts = Submission.query.order_by(Submission.date_posted.desc()).paginate(
+        page=page, per_page=5
+    )
+    return render_template("submissions.html", title="Submissions", posts=posts)
