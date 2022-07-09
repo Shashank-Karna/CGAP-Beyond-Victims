@@ -48,9 +48,15 @@
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
               <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
-              <a class="nav-item nav-link" href="{{ url_for('blogs') }}">Blogs</a>
-              <a class="nav-item nav-link" href="{{ url_for('submit_post') }}">Submissions</a>
-              <a class="nav-item nav-link" href="{{ url_for('about') }}">About</a>
+              <a class="nav-item nav-link" href="{{ url_for('blogs') }}"
+                >Blogs</a
+              >
+              <a class="nav-item nav-link" href="{{ url_for('submit_post') }}"
+                >Submissions</a
+              >
+              <a class="nav-item nav-link" href="{{ url_for('about') }}"
+                >About</a
+              >
             </div>
 
             <div class="navbar-nav">
@@ -98,9 +104,7 @@
             <li class="list-group-item list-group-item-light">etc</li>
           </ul>
         </div>
-        {% else %}
-        ...
-        {% endif %}
+        {% else %} ... {% endif %}
         <!-- <div class="content-section">
           <h3>Our Sidebar</h3>
           <p class='text-muted'>Random Sidebar Information.
@@ -115,7 +119,7 @@
         <div class="col-md-4"></div>
       </div>
     </main>
-    <div>
+    <footer>
       <div className="footer">
         <div className="container fit-content">
           <div className="row">
@@ -197,7 +201,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </footer>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
