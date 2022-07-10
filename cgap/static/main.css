@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:700");
+@import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@700&display=swap");
+
 body {
   background: #fafafa;
   color: #333333;
@@ -122,7 +125,3 @@ a:focus {
 footer {
   background: #212529;
 }
-
-/* ==========================================
-      CUSTOM UTILS CLASSES
-    ========================================== */
