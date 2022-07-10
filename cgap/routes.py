@@ -232,34 +232,30 @@ def submission(submission_id):
     )
 
 
-# @app.route("/post/<int:post_id>/update", methods=["GET", "POST"])
-# @login_required
-# def edit_submission(post_id):
-#     post = Post.query.get_or_404(post_id)
-#     if post.author != current_user:
-#         abort(403)
-#     form = PostForm()
-#     if form.validate_on_submit():
-#         post.title = form.title.data
-#         post.content = form.content.data
-#         db.session.commit()
-#         flash("Your Post has been updated!", "success")
-#         return redirect(url_for("post", post_id=post.id))
-#     elif request.method == "GET":
-#         form.title.data = post.title
-#         form.content.data = post.content
-#     return render_template(
-#         "create_post.html", title="Update Post", form=form, legend="Update Post"
-#     )
+@app.route("/submission/<int:submission_id>/update", methods=["GET", "POST"])
+def edit_submission(submission_id):
+    submission = Submission.query.get_or_404(submission_id)
+    form = SubmitPostForm()
+    if form.validate_on_submit():
+        submission.title = form.title.data
+        submission.content = form.content.data
+        submission.image_file = form.picture.data
+        db.session.commit()
+        flash("This submission has been updated!", "success")
+        return redirect(url_for("submission", submission_id=submission.id))
+    elif request.method == "GET":
+        form.title.data = submission.title
+        form.content.data = submission.content
+    return render_template(
+        "create_post.html", title="Update Post", form=form, legend="Update Post"
+    )
 
 
-# @app.route("/post/<int:post_id>/delete", methods=["POST"])
-# @login_required
-# def delete_post(post_id):
-#     post = Post.query.get_or_404(post_id)
-#     if post.author != current_user:
-#         abort(403)
-#     db.session.delete(post)
-#     db.session.commit()
-#     flash("Your Post has been deleted!", "success")
-#     return redirect(url_for("blogs"))
+@app.route("/submission/<int:submission_id>/delete", methods=["POST"])
+def delete_submission(submission_id):
+    submission = Submission.query.get_or_404(submission_id)
+
+    db.session.delete(submission)
+    db.session.commit()
+    flash("This submission has been deleted!", "success")
+    return redirect(url_for("submissions"))
