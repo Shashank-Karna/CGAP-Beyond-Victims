@@ -75,11 +75,14 @@ def logout():
     return redirect(url_for("home"))
 
 
-def save_picture(form_picture):
+def save_picture(form_picture, title):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, "static/profile_pics", picture_fn)
+    if title == "account":
+        picture_path = os.path.join(app.root_path, "static/profile_pics", picture_fn)
+    else:
+        picture_path = os.path.join(app.root_path, "static/blog_images", picture_fn)
 
     output_size = (125, 125)
     i = Image.open(form_picture)
@@ -95,7 +98,7 @@ def account():
     form = UpdateAccountForm()
     if form.validate_on_submit():
         if form.picture.data:
-            picture_file = save_picture(form.picture.data)
+            picture_file = save_picture(form.picture.data, "account")
             current_user.image_file = picture_file
         current_user.username = form.username.data
         current_user.email = form.email.data
@@ -116,8 +119,15 @@ def account():
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data, "submit_post")
+        else:
+            picture_file = "cgap\static\images\women_default.jpg"
         post = Post(
-            title=form.title.data, content=form.content.data, author=current_user
+            title=form.title.data,
+            content=form.content.data,
+            author=current_user,
+            image_file=picture_file,
         )
         db.session.add(post)
         db.session.commit()
@@ -183,8 +193,15 @@ def user_posts(username):
 def submit_post():
     form = SubmitPostForm()
     if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data, "submit_post")
+        else:
+            picture_file = "cgap\static\images\women_default.jpg"
         submission = Submission(
-            title=form.title.data, content=form.content.data, author=form.author.data
+            title=form.title.data,
+            content=form.content.data,
+            author=form.author.data,
+            image_file=picture_file,
         )
         db.session.add(submission)
         db.session.commit()
@@ -196,6 +213,7 @@ def submit_post():
 
 
 @app.route("/submissions")
+# @login_required
 def submissions():
     page = request.args.get("page", 1, type=int)
     posts = Submission.query.order_by(Submission.date_posted.desc()).paginate(
