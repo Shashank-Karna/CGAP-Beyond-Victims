@@ -213,7 +213,7 @@ def submit_post():
 
 
 @app.route("/submissions")
-# @login_required
+@login_required
 def submissions():
     page = request.args.get("page", 1, type=int)
     submissions = Submission.query.order_by(Submission.date_posted.desc()).paginate(
@@ -225,6 +225,7 @@ def submissions():
 
 
 @app.route("/submission/<int:submission_id>")
+@login_required
 def submission(submission_id):
     submission = Submission.query.get_or_404(submission_id)
     return render_template(
@@ -233,6 +234,7 @@ def submission(submission_id):
 
 
 @app.route("/submission/<int:submission_id>/update", methods=["GET", "POST"])
+@login_required
 def edit_submission(submission_id):
     submission = Submission.query.get_or_404(submission_id)
     form = SubmitPostForm()
@@ -252,6 +254,7 @@ def edit_submission(submission_id):
 
 
 @app.route("/submission/<int:submission_id>/delete", methods=["POST"])
+@login_required
 def delete_submission(submission_id):
     submission = Submission.query.get_or_404(submission_id)
 
@@ -259,3 +262,20 @@ def delete_submission(submission_id):
     db.session.commit()
     flash("This submission has been deleted!", "success")
     return redirect(url_for("submissions"))
+
+
+@app.route("/submission/<int:submission_id>/upload", methods=["GET", "POST"])
+@login_required
+def upload_as_post(submission_id):
+    submission = Submission.query.get_or_404(submission_id)
+
+    post = Post(
+        title=submission.title,
+        content=submission.content,
+        author=current_user,
+        image_file=submission.image_file,
+    )
+    db.session.add(post)
+    db.session.commit()
+    flash("This submission has been uploaded as a post!", "success")
+    return redirect(url_for("blogs"))
