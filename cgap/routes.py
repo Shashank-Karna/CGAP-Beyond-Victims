@@ -1,4 +1,5 @@
 import email
+from fileinput import filename
 import secrets
 import os
 from PIL import Image
@@ -75,11 +76,16 @@ def logout():
     return redirect(url_for("home"))
 
 
-def save_picture(form_picture):
+def save_picture(form_picture, title):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, "static/profile_pics", picture_fn)
+    if title == "account":
+        picture_path = os.path.join(
+            app.root_path, "static/images/profile_pics", picture_fn
+        )
+    else:
+        picture_path = os.path.join(app.root_path, "static/images", picture_fn)
 
     output_size = (125, 125)
     i = Image.open(form_picture)
@@ -105,7 +111,9 @@ def account():
     elif request.method == "GET":
         form.username.data = current_user.username
         form.email.data = current_user.email
-    image_file = url_for("static", filename="profile_pics/" + current_user.image_file)
+    image_file = url_for(
+        "static", filename="images/profile_pics/" + current_user.image_file
+    )
     return render_template(
         "account.html", title="Account", image_file=image_file, form=form
     )
@@ -119,7 +127,7 @@ def new_post():
         if form.picture.data:
             picture_file = save_picture(form.picture.data, "submit_post")
         else:
-            picture_file = "cgap\static\images\women_default.jpg"
+            picture_file = "women_default.jpg"
         post = Post(
             title=form.title.data,
             content=form.content.data,
@@ -193,7 +201,7 @@ def submit_post():
         if form.picture.data:
             picture_file = save_picture(form.picture.data, "submit_post")
         else:
-            picture_file = "cgap\static\images\women_default.jpg"
+            picture_file = url_for("static", filename="images/women_default.jpg")
         submission = Submission(
             title=form.title.data,
             content=form.content.data,
@@ -210,7 +218,7 @@ def submit_post():
 
 
 @app.route("/submissions")
-@login_required
+# @login_required
 def submissions():
     page = request.args.get("page", 1, type=int)
     submissions = Submission.query.order_by(Submission.date_posted.desc()).paginate(
@@ -222,7 +230,7 @@ def submissions():
 
 
 @app.route("/submission/<int:submission_id>")
-@login_required
+# @login_required
 def submission(submission_id):
     submission = Submission.query.get_or_404(submission_id)
     return render_template(
@@ -245,6 +253,7 @@ def edit_submission(submission_id):
     elif request.method == "GET":
         form.title.data = submission.title
         form.content.data = submission.content
+        form.picture.data = submission.image_file
     return render_template(
         "create_post.html", title="Update Post", form=form, legend="Update Post"
     )
